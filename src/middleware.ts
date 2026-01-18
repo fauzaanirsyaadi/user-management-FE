@@ -3,7 +3,6 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value
-  const user = request.cookies.get('user')?.value
 
   const isAuthPage = request.nextUrl.pathname === '/login'
   const isProtectedRoute = 
