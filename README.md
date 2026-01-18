@@ -1,6 +1,6 @@
 # User Management Frontend
 
-A Next.js 14 App Router application with Tailwind CSS for user management, featuring authentication, RBAC, and CRUD operations.
+A Next.js 15 App Router application with React 19 and Tailwind CSS for user management, featuring authentication, RBAC, and CRUD operations.
 
 ## Features
 
@@ -13,11 +13,12 @@ A Next.js 14 App Router application with Tailwind CSS for user management, featu
 
 ## Tech Stack
 
-- Next.js 14 (App Router)
+- Next.js 15 (App Router)
+- React 19
 - TypeScript
 - Tailwind CSS
 - Axios for API calls
-- js-cookie for cookie management
+- HttpOnly cookies for secure JWT storage
 
 ## Getting Started
 
@@ -82,9 +83,9 @@ src/
 
 ### 1. Authentication
 - Login form with username and password
-- JWT token stored in secure HTTP-only cookies
+- JWT token stored in secure HttpOnly cookies (server-side)
 - Automatic redirect to dashboard on successful login
-- Token sent with every API request via Axios interceptor
+- Cookies sent automatically with every API request
 
 ### 2. Middleware
 - Protects `/dashboard` and `/users` routes from unauthenticated access
@@ -148,9 +149,9 @@ The login page displays test credentials:
 
 ## Security Features
 
-- Secure cookie storage for JWT tokens
-- HTTP-only and SameSite cookies in production
-- Automatic token refresh on API calls
+- Secure HttpOnly cookie storage for JWT tokens (prevents XSS attacks)
+- SameSite and Secure cookies in production
+- Server-side cookie management
 - Protected routes with middleware
 - RBAC implementation on both UI and API level
 
