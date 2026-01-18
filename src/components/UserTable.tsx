@@ -10,7 +10,7 @@ export default function UserTable({ users, onEdit, onDelete }: UserTableProps) {
   if (users.length === 0) {
     return (
       <div className="p-8 text-center text-gray-500">
-        No users found. Click "Create New User" to add one.
+        No users found. Click &quot;Create New User&quot; to add one.
       </div>
     )
   }
