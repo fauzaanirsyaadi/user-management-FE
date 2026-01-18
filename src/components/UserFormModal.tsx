@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { User, CreateUserRequest } from '@/types/auth'
+import { User, CreateUserRequest, UpdateUserRequest } from '@/types/auth'
 import { userService } from '@/lib/services'
 
 interface UserFormModalProps {
@@ -45,7 +45,7 @@ export default function UserFormModal({ user, onClose, onSave }: UserFormModalPr
 
     try {
       if (user) {
-        const updateData: any = {
+        const updateData: UpdateUserRequest = {
           username: formData.username,
           email: formData.email,
           role: formData.role,
