@@ -3,12 +3,29 @@ import { LoginRequest, LoginResponse, User, CreateUserRequest, UpdateUserRequest
 
 export const authService = {
   async login(credentials: LoginRequest): Promise<LoginResponse> {
-    const response = await api.post<LoginResponse>('/api/auth/login', credentials)
-    return response.data
+    // Use the Next.js API route for login
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    })
+    
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(error.message || 'Login failed')
+    }
+    
+    const data = await response.json()
+    return { token: '', user: data.user } // Token is in HttpOnly cookie
   },
 
   async logout(): Promise<void> {
-    await api.post('/api/auth/logout')
+    // Use the Next.js API route for logout
+    await fetch('/api/auth/logout', {
+      method: 'POST',
+    })
   },
 
   async getCurrentUser(): Promise<User> {

@@ -1,34 +1,24 @@
 import axios from 'axios'
-import Cookies from 'js-cookie'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
+// Use the Next.js API proxy instead of direct backend calls
+const API_BASE_URL = '/api/proxy'
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // Include cookies in requests
 })
-
-api.interceptors.request.use(
-  (config) => {
-    const token = Cookies.get('token')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  }
-)
 
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      Cookies.remove('token')
-      Cookies.remove('user')
+      // Clear client-side user cookie
+      if (typeof document !== 'undefined') {
+        document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+      }
       if (typeof window !== 'undefined') {
         window.location.href = '/login'
       }

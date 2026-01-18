@@ -1,34 +1,37 @@
-import Cookies from 'js-cookie'
 import { User } from '@/types/auth'
 
-export const setAuth = (token: string, user: User) => {
-  Cookies.set('token', token, { 
-    expires: 7,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
-  })
-  Cookies.set('user', JSON.stringify(user), { 
-    expires: 7,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
-  })
+// Helper to get cookie value by name
+function getCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null
+  
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) {
+    return parts.pop()?.split(';').shift() || null
+  }
+  return null
 }
 
-export const getAuth = (): { token: string | null; user: User | null } => {
-  const token = Cookies.get('token') || null
-  const userStr = Cookies.get('user')
-  const user = userStr ? JSON.parse(userStr) : null
-  return { token, user }
+// Helper to delete a cookie
+function deleteCookie(name: string) {
+  if (typeof document === 'undefined') return
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+}
+
+export const getAuth = (): { user: User | null } => {
+  const userStr = getCookie('user')
+  const user = userStr ? JSON.parse(decodeURIComponent(userStr)) : null
+  return { user }
 }
 
 export const clearAuth = () => {
-  Cookies.remove('token')
-  Cookies.remove('user')
+  deleteCookie('user')
+  // Note: token cookie is HttpOnly and will be cleared by server
 }
 
 export const isAuthenticated = (): boolean => {
-  const { token } = getAuth()
-  return !!token
+  const { user } = getAuth()
+  return !!user
 }
 
 export const hasRole = (role: 'ADMIN' | 'USER'): boolean => {
@@ -39,3 +42,4 @@ export const hasRole = (role: 'ADMIN' | 'USER'): boolean => {
 export const isAdmin = (): boolean => {
   return hasRole('ADMIN')
 }
+
