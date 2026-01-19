@@ -23,7 +23,10 @@ export const authService = {
   },
 
   async logout(): Promise<void> {
-    await api.post('/api/auth/logout')
+    // Use the Next.js API route for logout
+    await fetch('/api/auth/logout', {
+      method: 'POST',
+    })
   },
 
   async getCurrentUser(): Promise<User> {

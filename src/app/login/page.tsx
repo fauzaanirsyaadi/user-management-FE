@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { authService } from '@/lib/services'
-import { setAuth } from '@/lib/auth'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -28,8 +27,8 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      const response = await authService.login(formData)
-      setAuth(response.token, response.user)
+      await authService.login(formData)
+      // Cookies are set by the API route
       router.push('/dashboard')
     } catch (err: any) {
       const data = err?.response?.data
