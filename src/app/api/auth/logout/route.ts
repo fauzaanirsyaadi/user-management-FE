@@ -9,18 +9,18 @@ export async function POST() {
     // Clear cookies
     response.cookies.set('token', '', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 0,
+      secure: false,
+      sameSite: 'lax',
       path: '/',
+      maxAge: 0,
     })
 
     response.cookies.set('user', '', {
       httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 0,
+      secure: false,
+      sameSite: 'lax',
       path: '/',
+      maxAge: 0,
     })
 
     return response

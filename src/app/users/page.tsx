@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getAuth, clearAuth, isAdmin } from '@/lib/auth'
 import { User } from '@/types/auth'
-import { userService } from '@/lib/services'
+import { authService, userService } from '@/lib/services'
 import UserTable from '@/components/UserTable'
 import UserFormModal from '@/components/UserFormModal'
 
@@ -16,11 +16,13 @@ export default function UsersPage() {
   const [error, setError] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [editingUser, setEditingUser] = useState<User | null>(null)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     const { user } = getAuth()
     setCurrentUser(user)
-    
+
     if (!isAdmin()) {
       router.push('/dashboard')
       return
@@ -43,7 +45,11 @@ export default function UsersPage() {
   }
 
   const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' })
+    try {
+      await authService.logout()
+    } catch (error) {
+      console.error('Logout failed:', error)
+    }
     clearAuth()
     router.push('/login')
   }
@@ -86,7 +92,7 @@ export default function UsersPage() {
     router.push('/dashboard')
   }
 
-  if (!isAdmin()) {
+  if (!mounted || !isAdmin()) {
     return null
   }
 

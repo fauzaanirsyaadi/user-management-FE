@@ -24,15 +24,15 @@ async function handleRequest(request: NextRequest, method: string) {
     const url = new URL(request.url)
     const pathSegments = url.pathname.split('/api/proxy/')
     const apiPath = pathSegments[1] || ''
-    
+
     // Get token from HttpOnly cookie
     const token = request.cookies.get('token')?.value
-    
+
     // Prepare headers
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
     }
-    
+
     if (token) {
       headers['Authorization'] = `Bearer ${token}`
     }
@@ -65,6 +65,11 @@ async function handleRequest(request: NextRequest, method: string) {
     }
 
     // Return response with same status
+    // 204 No Content cannot have a body in Next.js response constructor
+    if (response.status === 204) {
+      return new NextResponse(null, { status: 204 })
+    }
+
     return NextResponse.json(data, { status: response.status })
   } catch (error: any) {
     console.error('Proxy error:', error)

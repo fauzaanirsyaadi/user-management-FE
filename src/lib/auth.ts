@@ -1,20 +1,24 @@
 import { User } from '@/types/auth'
+import Cookies from 'js-cookie'
 
 export const setAuth = (token: string, user: User) => {
-  if (!token || !user) {
-    console.warn('Invalid token or user data provided to setAuth')
+  if (!user) {
+    console.warn('Invalid user data provided to setAuth')
     return
   }
 
-  Cookies.set('token', token, {
-    expires: 7,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
-  })
+  if (token) {
+    Cookies.set('token', token, {
+      expires: 7,
+      secure: false,
+      sameSite: 'lax'
+    })
+  }
+
   Cookies.set('user', JSON.stringify(user), {
     expires: 7,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
+    secure: false,
+    sameSite: 'lax'
   })
 }
 

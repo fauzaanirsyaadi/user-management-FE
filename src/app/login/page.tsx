@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { authService } from '@/lib/services'
 
+
 export default function LoginPage() {
   const router = useRouter()
   const [formData, setFormData] = useState({
@@ -28,8 +29,9 @@ export default function LoginPage() {
 
     try {
       await authService.login(formData)
-      // Cookies are set by the API route
-      router.push('/dashboard')
+      // Cookies are set by the API route. detailed user info is also set in a cookie.
+      // We use window.location.href to force a full page reload and ensure middleware picks up the new cookies immediately.
+      window.location.href = '/dashboard'
     } catch (err: any) {
       const data = err?.response?.data
       setError(data?.message || data?.error || 'Login failed. Please check your credentials.')

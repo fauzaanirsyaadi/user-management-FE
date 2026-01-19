@@ -9,8 +9,10 @@ import { User } from '@/types/auth'
 export default function DashboardPage() {
   const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     const { user: currentUser } = getAuth()
     setUser(currentUser)
     const loadUserDetail = async () => {
@@ -109,7 +111,7 @@ export default function DashboardPage() {
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Username</p>
-                      <p className="text-sm font-bold text-gray-900">{user?.username || '—'}</p>
+                      <p className="text-sm font-bold text-gray-900">{mounted ? user?.username : '—'}</p>
                     </div>
                   </div>
 
@@ -121,7 +123,7 @@ export default function DashboardPage() {
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Email Address</p>
-                      <p className="text-sm font-bold text-gray-900">{user?.email || '—'}</p>
+                      <p className="text-sm font-bold text-gray-900">{mounted ? user?.email : '—'}</p>
                     </div>
                   </div>
 
@@ -134,10 +136,10 @@ export default function DashboardPage() {
                     <div>
                       <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Role</p>
                       <div>
-                        {user?.role ? (
+                        {mounted && user?.role ? (
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ring-1 ring-inset ${user.role === 'ADMIN'
-                              ? 'bg-purple-50 text-purple-700 ring-purple-600/20'
-                              : 'bg-green-50 text-green-700 ring-green-600/20'
+                            ? 'bg-purple-50 text-purple-700 ring-purple-600/20'
+                            : 'bg-green-50 text-green-700 ring-green-600/20'
                             }`}>
                             {user.role}
                           </span>
@@ -150,7 +152,7 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {isAdmin() && (
+              {mounted && isAdmin() && (
                 <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">User Management</h3>
                   <p className="text-gray-600 mb-4">Create, update, and delete users</p>
@@ -163,7 +165,7 @@ export default function DashboardPage() {
                 </div>
               )}
 
-              {!isAdmin() && (
+              {mounted && !isAdmin() && (
                 <div className="border border-gray-200 rounded-lg p-6 bg-gray-50">
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">User Management</h3>
                   <p className="text-gray-600 mb-4">Admin access required</p>

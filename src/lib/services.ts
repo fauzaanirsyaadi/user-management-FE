@@ -3,23 +3,24 @@ import { LoginRequest, LoginResponse, User, CreateUserRequest, UpdateUserRequest
 
 export const authService = {
   async login(credentials: LoginRequest): Promise<LoginResponse> {
-    type RawLoginResponse = {
-      token: string
-      type?: string
-      id: number
-      username: string
-      email: string
-      role: 'ADMIN' | 'USER'
+    // Use the Next.js API route for login
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(error.message || 'Login failed')
     }
-    const response = await api.post<RawLoginResponse>('/api/auth/login', credentials)
-    const data = response.data
-    const user: User = {
-      id: data.id,
-      username: data.username,
-      email: data.email,
-      role: data.role,
-    }
-    return { token: data.token, user }
+
+    const data = await response.json()
+    // Token is handled by HttpOnly cookie set by the API route
+    // User data is also set in a cookie by the API route, but we return it here for immediate UI updates if needed
+    return { token: data.token || '', user: data.user }
   },
 
   async logout(): Promise<void> {
