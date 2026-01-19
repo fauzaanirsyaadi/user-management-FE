@@ -22,7 +22,7 @@ async function handleRequest(request: NextRequest, method: string) {
   try {
     // Get the path from the URL
     const url = new URL(request.url)
-    const pathSegments = url.pathname.split('/api/proxy/')
+    const pathSegments = url.pathname.split('/app-api/proxy/')
     const apiPath = pathSegments[1] || ''
 
     // Get token from HttpOnly cookie

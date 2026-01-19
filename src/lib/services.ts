@@ -4,7 +4,7 @@ import { LoginRequest, LoginResponse, User, CreateUserRequest, UpdateUserRequest
 export const authService = {
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     // Use the Next.js API route for login
-    const response = await fetch('/api/auth/login', {
+    const response = await fetch('/app-api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ export const authService = {
 
   async logout(): Promise<void> {
     // Use the Next.js API route for logout
-    await fetch('/api/auth/logout', {
+    await fetch('/app-api/auth/logout', {
       method: 'POST',
     })
   },

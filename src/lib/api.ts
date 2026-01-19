@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // Use the Next.js API proxy instead of direct backend calls
-const API_BASE_URL = '/api/proxy'
+const API_BASE_URL = '/app-api/proxy'
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
