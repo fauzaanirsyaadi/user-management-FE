@@ -13,6 +13,7 @@ export default function LoginPage() {
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -31,7 +32,8 @@ export default function LoginPage() {
       setAuth(response.token, response.user)
       router.push('/dashboard')
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please check your credentials.')
+      const data = err?.response?.data
+      setError(data?.message || data?.error || 'Login failed. Please check your credentials.')
     } finally {
       setLoading(false)
     }
@@ -60,6 +62,7 @@ export default function LoginPage() {
               type="text"
               id="username"
               name="username"
+              suppressHydrationWarning={true}
               value={formData.username}
               onChange={handleChange}
               required
@@ -72,21 +75,34 @@ export default function LoginPage() {
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-              placeholder="Enter your password"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                name="password"
+                suppressHydrationWarning={true}
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 pr-12"
+                placeholder="Enter your password"
+              />
+              <button
+                type="button"
+                suppressHydrationWarning={true}
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-0 px-3 text-sm text-gray-600 hover:text-gray-900"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
+            suppressHydrationWarning={true}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed"
           >
             {loading ? 'Signing in...' : 'Sign In'}

@@ -3,8 +3,23 @@ import { LoginRequest, LoginResponse, User, CreateUserRequest, UpdateUserRequest
 
 export const authService = {
   async login(credentials: LoginRequest): Promise<LoginResponse> {
-    const response = await api.post<LoginResponse>('/api/auth/login', credentials)
-    return response.data
+    type RawLoginResponse = {
+      token: string
+      type?: string
+      id: number
+      username: string
+      email: string
+      role: 'ADMIN' | 'USER'
+    }
+    const response = await api.post<RawLoginResponse>('/api/auth/login', credentials)
+    const data = response.data
+    const user: User = {
+      id: data.id,
+      username: data.username,
+      email: data.email,
+      role: data.role,
+    }
+    return { token: data.token, user }
   },
 
   async logout(): Promise<void> {
