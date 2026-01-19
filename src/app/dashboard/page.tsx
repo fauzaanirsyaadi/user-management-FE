@@ -31,7 +31,11 @@ export default function DashboardPage() {
   }, [])
 
   const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' })
+    try {
+      await authService.logout()
+    } catch (error) {
+      console.error('Logout failed:', error)
+    }
     clearAuth()
     router.push('/login')
   }
@@ -79,21 +83,21 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity transform translate-x-1/4 -translate-y-1/4">
-                   <svg className="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                   </svg>
+                  <svg className="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                  </svg>
                 </div>
-                
+
                 <div className="flex items-center space-x-3 mb-6 relative z-10">
-                    <div className="p-2.5 bg-blue-50 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 className="text-xl font-bold text-gray-900">User Profile</h3>
-                        <p className="text-sm text-gray-500">Personal Information</p>
-                    </div>
+                  <div className="p-2.5 bg-blue-50 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900">User Profile</h3>
+                    <p className="text-sm text-gray-500">Personal Information</p>
+                  </div>
                 </div>
 
                 <div className="space-y-4 relative z-10">
@@ -122,7 +126,7 @@ export default function DashboardPage() {
                   </div>
 
                   <div className="flex items-center p-3 bg-gray-50 rounded-xl border border-gray-100 group-hover:border-blue-100 group-hover:bg-blue-50/30 transition-all duration-300">
-                     <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white text-gray-400 shadow-sm mr-4 ring-1 ring-gray-100">
+                    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white text-gray-400 shadow-sm mr-4 ring-1 ring-gray-100">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
@@ -131,15 +135,14 @@ export default function DashboardPage() {
                       <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Role</p>
                       <div>
                         {user?.role ? (
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ring-1 ring-inset ${
-                                user.role === 'ADMIN' 
-                                ? 'bg-purple-50 text-purple-700 ring-purple-600/20' 
-                                : 'bg-green-50 text-green-700 ring-green-600/20'
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ring-1 ring-inset ${user.role === 'ADMIN'
+                              ? 'bg-purple-50 text-purple-700 ring-purple-600/20'
+                              : 'bg-green-50 text-green-700 ring-green-600/20'
                             }`}>
-                              {user.role}
-                            </span>
+                            {user.role}
+                          </span>
                         ) : (
-                            <span className="text-sm font-bold text-gray-900">—</span>
+                          <span className="text-sm font-bold text-gray-900">—</span>
                         )}
                       </div>
                     </div>
