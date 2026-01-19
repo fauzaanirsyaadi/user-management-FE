@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { getAuth, clearAuth, isAdmin } from '@/lib/auth'
-import { authService, userService } from '@/lib/services'
-import { User } from '@/types/auth'
+import { getAuth, clearAuth, isAdmin } from '../../lib/auth'
+import { authService, userService } from '../../lib/services'
+import { User } from '../../types/auth'
 
 export default function DashboardPage() {
   const router = useRouter()

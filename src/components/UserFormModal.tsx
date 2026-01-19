@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { User, CreateUserRequest, UpdateUserRequest } from '@/types/auth'
-import { userService } from '@/lib/services'
+import { User, CreateUserRequest, UpdateUserRequest } from '../types/auth'
+import { userService } from '../lib/services'
 
 interface UserFormModalProps {
   user: User | null

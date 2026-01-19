@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { getAuth, clearAuth, isAdmin } from '@/lib/auth'
-import { User } from '@/types/auth'
-import { authService, userService } from '@/lib/services'
-import UserTable from '@/components/UserTable'
-import UserFormModal from '@/components/UserFormModal'
+import { getAuth, clearAuth, isAdmin } from '../../lib/auth'
+import { User } from '../../types/auth'
+import { authService, userService } from '../../lib/services'
+import UserTable from '../../components/UserTable'
+import UserFormModal from '../../components/UserFormModal'
 
 export default function UsersPage() {
   const router = useRouter()
